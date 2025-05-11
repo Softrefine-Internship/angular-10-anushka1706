@@ -21,14 +21,16 @@
         <mat-card-header class="title">
           <mat-card-title>{{ image.description }}</mat-card-title>
         </mat-card-header>
-        <img
-          mat-card-image
-          [src]="'../../assets/images/' + image.imageUrl"
-          alt="{{ image.description }}"
-          class="image"
-          (click)="viewImage(image)"
-          style="cursor: pointer"
-        />
+        <div class="image-wrapper">
+          <img
+            mat-card-image
+            [src]="'../../assets/images/' + image.imageUrl"
+            alt="{{ image.description }}"
+            class="image"
+            (click)="viewImage(image)"
+            style="cursor: pointer"
+          />
+        </div>
         <mat-card-content class="mat-tag-container">
           <p class="tags">
             <button mat-mini-fab color="primary" (click)="openTagDialog(image)">
