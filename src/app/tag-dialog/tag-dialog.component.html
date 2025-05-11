@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Manage Tags</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Add Tag</mat-label>
+    <mat-chip-grid #chipList aria-label="Tag selection">
+      <mat-chip
+        *ngFor="let tag of tags"
+        [removable]="true"
+        (removed)="removeTag(tag)"
+      >
+        {{ tag }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="New tag..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addTag($event)"
+        [formControl]="tagControl"
+      />
+    </mat-chip-grid>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

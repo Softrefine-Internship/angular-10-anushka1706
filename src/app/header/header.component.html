@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" class="header-container" style="justify-content: space-between; display: flex;" *ngIf="showHeader()">
+  <div class="search-wrapper">
+    <mat-form-field
+      appearance="outline"
+      style="width: 60%;"
+      class="search-container"
+      *ngIf="showSearch()"
+    >
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        placeholder="Search by description or tag"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+      />
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <button
+    mat-raised-button
+    color="accent"
+    [routerLink]="'/upload'"
+    class="new-btn-header"
+  >
+    +
+  </button>
+</mat-toolbar>

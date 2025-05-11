@@ -1,0 +1,23 @@
+<h3>Edit Tags</h3>
+
+<div class="tag-list">
+  <span *ngFor="let tag of tags" class="tag">
+    {{ tag }}
+    <button mat-icon-button (click)="removeTag(tag)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </span>
+</div>
+
+<mat-form-field appearance="fill">
+  <mat-label>New tag</mat-label>
+  <input matInput [(ngModel)]="newTag" (keyup.enter)="addTag()" />
+  <button mat-icon-button matSuffix (click)="addTag()">
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-form-field>
+
+<div class="actions">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="save()">Save</button>
+</div>

@@ -1,0 +1,72 @@
+<div class="upload-container">
+  <mat-card
+    class="upload-card"
+    (drop)="onFileDrop($event)"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    [class.dragging]="isDragging"
+  >
+    <div class="upload-content">
+      <mat-icon class="custom-icon">cloud_upload</mat-icon>
+      <p>Drag & Drop your image file here</p>
+      <p>or</p>
+      <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="fileInput.click()"
+        class="file-btn"
+      >
+        Select File
+      </button>
+    </div>
+
+    <form [formGroup]="fileForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="file-input" class="file-label">Image url : </label>
+        <input
+          type="text"
+          [value]="file?.name"
+          readonly
+          class="file-input"
+          formControlName="imageUrl"
+        />
+      </div>
+      <div>
+        <label for="description" class="file-label">Description : </label>
+        <input type="text" class="file-input" formControlName="description" />
+      </div>
+
+      <div class="tag-container">
+        <label for="tag-name" class="file-label">Tag : </label>
+        <mat-form-field class="chip-field" appearance="outline" class="chip-container">
+          <mat-chip-grid
+            #chipList
+            aria-label="Tag selection"
+            formControlName="tags"
+          >
+            <mat-chip
+              *ngFor="let tag of fileForm.get('tags')?.value"
+              [removable]="true"
+              (removed)="removeTag(tag)"
+              color="accent"
+            >
+              {{ tag }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              placeholder="Add a tag"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addTag($event)"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button class="upload-btn" type="submit" [disabled]="fileForm.invalid">Upload</button>
+    </form>
+  </mat-card>
+</div>

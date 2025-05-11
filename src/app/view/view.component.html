@@ -1,0 +1,25 @@
+<div class="view-container">
+  <img
+    [src]="'../../assets/images/' + imageUrl"
+    alt="{{ description }}"
+    class="view-image"
+  />
+
+  <div class="details-container">
+    <div *ngIf="tags.length > 0">
+      <p class="heading">Tags:</p>
+      <div class="tags-container">
+        <span class="tag" *ngFor="let tag of tags">{{ tag }}</span>
+      </div>
+    </div>
+    <div class="description">
+      <p  class="heading">
+        Description : <span>{{ description }}</span>
+      </p>
+    </div>
+    <div class="timestamps">
+      <p class="heading">Created At: <span>{{ createdAt }}</span></p>
+      <p class="heading">Updated At: <span>{{ updatedAt }}</span></p>
+    </div>
+  </div>
+</div>

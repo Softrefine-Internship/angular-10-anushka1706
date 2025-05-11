@@ -1,0 +1,33 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  justify-content: end;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding-top: 1rem;
+  }
+}
+.search-container {
+  margin-top: 1rem;
+  @media (max-width: 800px) {
+    width: 100% !important;
+  }
+}
+.search-wrapper {
+  width: 70%;
+  @media (max-width: 800px) {
+    order: 2;
+    width: 100%;
+  }
+}
+.new-btn-header {
+  align-self: start;
+  @media (max-width: 800px) {
+    order: 1;
+    align-self:end;
+  }
+}

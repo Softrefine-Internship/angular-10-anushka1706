@@ -1,0 +1,79 @@
+.upload-card {
+  width: 70%;
+  background-color: #344046;
+  font-size: 2rem;
+  padding: 2rem;
+  color: white;
+  display: flex;
+  justify-content: start;
+  border-radius: 10px;
+  flex-direction: column;
+  align-self: center;
+  gap: 2rem;
+  align-items: start;
+  .upload-content {
+    width: 100%;
+    border: 2px solid #4a4f52;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    gap: 1rem;
+  }
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+}
+.file-input {
+  padding: 8px;
+  background-color: #4b555b;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+.custom-drop {
+  font-size: larger;
+  color: rgb(198, 197, 197);
+}
+.file-btn {
+  align-self: center;
+}
+.upload-btn {
+  align-self: center;
+}
+form {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  width: 80%;
+  align-items: start;
+  div {
+    width: 100%;
+  }
+}
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  @media (max-width: 800px) {
+    width: 100%;
+    align-items: center;
+  }
+}
+.chip-container {
+  width: 90%;
+  height: auto;
+}
+.tag-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.tag-item {
+  background-color: #627b8a;
+}

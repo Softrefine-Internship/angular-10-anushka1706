@@ -1,0 +1,76 @@
+<div class="gallery-container">
+  <div class="top-container">
+    <h2 class="heading">Your Gallery</h2>
+    <mat-form-field appearance="fill" class="form-container">
+      <mat-label>Sort By</mat-label>
+      <mat-select [(value)]="sortBy" class="dropdown">
+        <mat-option value="description">Description</mat-option>
+        <mat-option value="newest">Newest</mat-option>
+        <mat-option value="oldest">Oldest</mat-option>
+        <mat-option value="updated">Updated</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="image-grid" *ngIf="isData">
+    <div class="masonry-grid">
+      <mat-card
+        *ngFor="let image of images | searchFilter : searchTerm | sort : sortBy"
+        class="image-card"
+      >
+        <mat-card-header class="title">
+          <mat-card-title>{{ image.description }}</mat-card-title>
+        </mat-card-header>
+        <img
+          mat-card-image
+          [src]="'../../assets/images/' + image.imageUrl"
+          alt="{{ image.description }}"
+          class="image"
+          (click)="viewImage(image)"
+          style="cursor: pointer"
+        />
+        <mat-card-content class="mat-tag-container">
+          <p class="tags">
+            <button mat-mini-fab color="primary" (click)="openTagDialog(image)">
+              +
+            </button>
+
+            <ng-container
+              *ngFor="let tag of getTagsToDisplay(image.tags, image.id!)"
+            >
+              <span class="tag" color="accent">{{ tag }}</span>
+            </ng-container>
+
+            <button
+              *ngIf="shouldShowToggleButton(image.tags)"
+              class="more-tags-btn"
+              (click)="toggleTags(image.id!)"
+            >
+              {{
+                expandedTags[image.id!]
+                  ? "-"
+                  : "+" + getRemainingCount(image.tags, image.id!)
+              }}
+            </button>
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button color="primary" (click)="onEditImage(image)">
+            <mat-icon color="accent">edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteImage(image.id!, image.imageUrl)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      <div class="new-btn-card" [routerLink]="'/upload'">
+        <mat-icon class="plus-icon">add</mat-icon>
+      </div>
+    </div>
+  </div>
+  <p class="no-images" *ngIf="!isData">No images found.</p>
+</div>

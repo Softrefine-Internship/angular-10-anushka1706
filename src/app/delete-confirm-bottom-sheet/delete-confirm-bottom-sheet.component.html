@@ -1,0 +1,7 @@
+<h3>Confirm Deletion</h3>
+<p>Are you sure you want to delete the image titled <strong>{{ data.title }}</strong>?</p>
+
+<div class="actions">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="warn" (click)="confirm()">Delete</button>
+</div>
