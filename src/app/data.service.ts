@@ -27,7 +27,6 @@ export class DataService {
                 images.push(imageObj);
               }
             }
-            console.log(images)
             return images;
           })
         );
@@ -35,8 +34,6 @@ export class DataService {
 
     saveData(data: ImageModel): Observable<{ name: string }> {
         const now = new Date().toISOString();
-        data.createdAt = now;
-        data.updatedAt = now;
         data.createdAt = now;
         data.updatedAt = now;
         return this.http.post<{ name: string }>(`${this.API}.json`, data);

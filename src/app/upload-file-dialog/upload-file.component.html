@@ -23,13 +23,12 @@
 
     <form [formGroup]="fileForm" (ngSubmit)="onSubmit()">
       <div>
-        <label for="file-input" class="file-label">Image url : </label>
-        <input
-          type="text"
-          [value]="file?.name"
-          readonly
-          class="file-input"
-          formControlName="imageUrl"
+        <label for="file-input" class="file-label">Image : </label>
+        <img
+          *ngIf="fileForm.get('imageUrl')?.value"
+          [src]="fileForm.get('imageUrl')?.value"
+          alt=""
+          class="preview-image"
         />
       </div>
       <div>
@@ -39,7 +38,11 @@
 
       <div class="tag-container">
         <label for="tag-name" class="file-label">Tag : </label>
-        <mat-form-field class="chip-field" appearance="outline" class="chip-container">
+        <mat-form-field
+          class="chip-field"
+          appearance="outline"
+          class="chip-container"
+        >
           <mat-chip-grid
             #chipList
             aria-label="Tag selection"
@@ -66,7 +69,20 @@
           </mat-chip-grid>
         </mat-form-field>
       </div>
-      <button mat-raised-button class="upload-btn" type="submit" [disabled]="fileForm.invalid">Upload</button>
+      <div mat-dialog-actions align="end">
+        <button
+          mat-raised-button
+          class="upload-btn"
+          type="submit"
+          [disabled]="fileForm.invalid"
+          mat-dialog-close
+        >
+          Upload
+        </button>
+        <button mat-raised-button color="warn" [mat-dialog-close]="true">
+          Cancel
+        </button>
+      </div>
     </form>
   </mat-card>
 </div>

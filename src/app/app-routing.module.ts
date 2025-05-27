@@ -2,7 +2,7 @@ import { Component, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GalleryComponent } from './gallery/gallery.component';
 import { ViewComponent } from './view/view.component';
-import { UploadFileComponent } from './upload-file/upload-file.component'
+import { UploadFileComponent } from './upload-file-dialog/upload-file.component'
 
 const routes: Routes = [
 

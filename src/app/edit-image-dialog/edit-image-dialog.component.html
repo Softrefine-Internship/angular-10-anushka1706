@@ -21,11 +21,12 @@
         Select Image
       </button>
     </div>
-      <mat-label>Image Url : </mat-label>
-      <input
-        *ngIf="editForm.get('imageUrl')?.value"
-        [value]="editForm.get('imageUrl')?.value"
-      /> 
+    <mat-label>Image : </mat-label>
+    <img
+      *ngIf="editForm.get('imageUrl')?.value"
+      [src]="editForm.get('imageUrl')?.value"
+      class="preview-image"
+    />
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Description</mat-label>
       <input matInput formControlName="description" />
@@ -34,28 +35,20 @@
       </mat-error>
     </mat-form-field>
 
+    <div class="chip-container">
+      <mat-chip
+        *ngFor="let tag of editForm.get('tags')?.value || []"
+        [removable]="true"
+        (removed)="removeTag(tag)"
+      >
+        {{ tag }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </div>
+
     <mat-form-field appearance="fill" style="width: 100%">
-      <mat-label>Tags</mat-label>
-      <mat-chip-grid #chipList formControlName="tags" aria-label="Tags">
-        <mat-chip
-          *ngFor="let tag of editForm.get('tags')?.value"
-          [removable]="true"
-          (removed)="removeTag(tag)"
-        >
-          {{ tag }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-        <input
-          placeholder="Add tag..."
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [matChipInputAddOnBlur]="true"
-          (matChipInputTokenEnd)="addTag($event)"
-        />
-      </mat-chip-grid>
-      <mat-error *ngIf="editForm.get('tags')?.hasError('required')">
-        At least one tag is required
-      </mat-error>
+      <mat-label>Add a tag</mat-label>
+      <input matInput placeholder="Add tag..." [(ngModel)]="newTag" [ngModelOptions]="{standalone: true}" (blur)="addTagManual($event)"/>
     </mat-form-field>
   </form>
 </mat-dialog-content>

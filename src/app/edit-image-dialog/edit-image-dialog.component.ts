@@ -1,8 +1,7 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { ImageModel } from '../image.model';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { MatChipGrid } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -15,6 +14,7 @@ export class EditImageDialogComponent {
   editForm: FormGroup;
   file: File | null = null;
   isDragging = false;
+  newTag: string = '';
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   @ViewChild('chipList') chipList!: MatChipGrid;
@@ -27,19 +27,23 @@ export class EditImageDialogComponent {
     this.editForm = this.fb.group({
       imageUrl: [data.image['imageUrl'], Validators.required],
       description: [data.image['description'], Validators.required],
-      tags: [data.image['tags'] || [], Validators.required],
+      tags: [data.image['tags']],
+      updateOn: 'submit',
     });
   }
-
-  addTag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value && !this.editForm.get('tags')?.value.includes(value)) {
-      const tagsControl = this.editForm.get('tags');
-      const currentTags = tagsControl?.value || [];
-      tagsControl?.setValue([...currentTags, value]);
-      tagsControl?.markAsTouched();
+  addTagManual(event: Event) {
+    if (event) {
+      event.preventDefault();
     }
-    event.chipInput!.clear();
+    const value = this.newTag.trim();
+    if (!value) return;
+    const tagsControl = this.editForm.get('tags');
+    const currentTags = tagsControl?.value || [];
+
+    if (!currentTags.includes(value)) {
+      tagsControl?.setValue([...currentTags, value]);
+    }
+    this.newTag = '';
   }
 
   removeTag(tag: string): void {
@@ -64,15 +68,24 @@ export class EditImageDialogComponent {
     this.isDragging = false;
     if (event.dataTransfer?.files?.length) {
       this.file = event.dataTransfer.files[0];
-      this.editForm.patchValue({ imageUrl: this.file.name });
+      this.processImage(this.file)
     }
+  }
+
+  processImage(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const previewImage = reader.result as string;
+      this.editForm.patchValue({ imageUrl: previewImage });
+    };
+    reader.readAsDataURL(file);
   }
 
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       this.file = target.files[0];
-      this.editForm.patchValue({ imageUrl: this.file.name });
+      this.processImage(this.file)
     }
   }
 
