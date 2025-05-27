@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router'; 
 import { DataService } from '../data.service';
 import { ImageModel } from '../image.model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatChipGrid } from '@angular/material/chips';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-upload-file',
@@ -24,8 +24,8 @@ export class UploadFileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dataService: DataService,
-    private router: Router, // Inject Router
-    private snackBar: MatSnackBar // Inject MatSnackBar
+    private router: Router, 
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class UploadFileComponent implements OnInit {
     const input = event.input;
     const value = event.value?.trim();
 
-    if (value && !this.fileForm.get('tags')?.value.includes(value)) { // Prevent duplicates
+    if (value && !this.fileForm.get('tags')?.value.includes(value)) {
       const tagsControl = this.fileForm.get('tags');
       const currentTags = tagsControl?.value || [];
       tagsControl?.setValue([...currentTags, value]);
