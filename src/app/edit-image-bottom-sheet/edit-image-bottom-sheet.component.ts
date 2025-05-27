@@ -45,7 +45,6 @@ export class EditImageBottomSheetComponent {
     const value = (event.value || '').trim();
     if (value) {
       const tags = this.editForm.get('tags')?.value || [];
-      console.log(tags)
       this.editForm.patchValue({ tags: [...tags, value] });
     }
     event.chipInput!.clear();

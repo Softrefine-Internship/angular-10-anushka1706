@@ -1,5 +1,5 @@
 .upload-card {
-  width: 70%;
+  width:100%;
   background-color: #344046;
   font-size: 2rem;
   padding: 2rem;
@@ -76,4 +76,9 @@ form {
 }
 .tag-item {
   background-color: #627b8a;
+}
+.preview-image {
+  height: 10rem;
+  width: 10rem;
+  object-fit: contain;
 }

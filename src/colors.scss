@@ -1,7 +1,7 @@
 @use "@angular/material" as mat;
 
 @include mat.core();
-$primary: #263238;
+$primary: #eceeef;
 $my-primary: mat.define-palette(mat.$blue-grey-palette, 900);
 $my-accent: mat.define-palette(mat.$cyan-palette, 900);
 

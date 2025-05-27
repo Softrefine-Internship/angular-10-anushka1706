@@ -14,7 +14,7 @@ import { TagBottomSheetComponent } from '../tag-bottom-sheet/tag-bottom-sheet.co
 import { EditImageBottomSheetComponent } from '../edit-image-bottom-sheet/edit-image-bottom-sheet.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-
+import { UploadFileComponent } from '../upload-file-dialog/upload-file.component';
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
@@ -24,7 +24,7 @@ export class GalleryComponent implements OnInit {
   images: ImageModel[] = [];
   searchTerm !: string
   searchSubscribe = new Subscription()
-  sortBy: string = 'newest';
+  sortBy !: string
   expandedTags: { [id: string]: boolean } = {};
   isMobileLayout: boolean = false;
   isLoading !: boolean
@@ -42,6 +42,9 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchImages();
+    this.searchService.sortBy.subscribe(value => {
+      this.sortBy = value
+    })
     this.searchSubscribe = this.searchService.searchSubject.subscribe(term => {
       this.searchTerm = term
     })
@@ -53,6 +56,7 @@ export class GalleryComponent implements OnInit {
       });
   }
   fetchImages(): void {
+    console.log('hii')
     this.dataService.fetchData().subscribe({
       next: (fetchedImages) => {
         this.images = fetchedImages;
@@ -81,7 +85,7 @@ export class GalleryComponent implements OnInit {
   }
 
   getTagsToDisplay(tags: string[], id: string): string[] {
-    return this.expandedTags[id] ? tags : tags.slice(0, 2);
+    return this.expandedTags[id] ? tags : tags?.slice(0, 2);
   }
 
   getRemainingCount(tags: string[], id: string): number {
@@ -91,10 +95,10 @@ export class GalleryComponent implements OnInit {
   openTagDialog(image: ImageModel): void {
     if (this.isMobileLayout) {
       const sheetRef = this.bottomSheet.open(TagBottomSheetComponent, {
-        data: { tags: image.tags }
+        data: { tags: image?.tags || [] }
       });
 
-      sheetRef.afterDismissed().subscribe((result: string[] | undefined) => {
+      sheetRef.afterDismissed().subscribe((result: string[] | undefined | []) => {
         if (result) {
           const updatedImage: ImageModel = { ...image, tags: result };
           this.dataService.updateImage(image.id!, updatedImage).subscribe(() => {
@@ -121,7 +125,7 @@ export class GalleryComponent implements OnInit {
     }
   }
 
-  deleteImage(imageId: number, imageUrl: string): void {
+  deleteImage(imageId: number, description: string): void {
     const confirmDelete = (confirmed: boolean) => {
       if (confirmed) {
         this.dataService.deleteImage(imageId.toString()).subscribe({
@@ -141,15 +145,16 @@ export class GalleryComponent implements OnInit {
 
     if (this.isMobileLayout) {
       const sheetRef = this.bottomSheet.open(ConfirmDeleteBottomSheetComponent, {
-        data: { imageUrl }
+        data: { description }
       });
 
       sheetRef.afterDismissed().subscribe(confirmDelete);
     } else {
       const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+        disableClose: true,
         width: 'auto',
         height: 'auto',
-        data: { imageUrl }
+        data: { description }
       });
 
       dialogRef.afterClosed().subscribe(confirmDelete);
@@ -163,15 +168,14 @@ export class GalleryComponent implements OnInit {
       });
 
       sheetRef.afterDismissed().subscribe((updatedImage: any) => {
-        console.log(666)
         this.dataService.updateImage(image.id!, updatedImage).subscribe(() => {
-          console.log(updatedImage)
           this.snackBar.open('Image updated successfully', 'Close', { duration: 3000 });
           this.fetchImages();
         });
       });
     } else {
       const dialogRef = this.dialog.open(EditImageDialogComponent, {
+        disableClose: true,
         width: '500px',
         data: { image },
       });
@@ -189,16 +193,21 @@ export class GalleryComponent implements OnInit {
   viewImage(image: any): void {
     this.router.navigate(['view', image.id], {
       queryParams: {
-        imageUrl: image.imageUrl,
-        description: image.description,
-        tags: JSON.stringify(image.tags),
-        createdAt: image.createdAt,
-        updatedAt: image.updatedAt
+        id: image.id
       }
     });
   }
   shouldShowToggleButton(tags: string[]): boolean {
-    return tags.length > 2;
+    return tags?.length > 2;
   }
-
+  openDialog(): void {
+    const dialogRef = this.dialog.open(UploadFileComponent, {
+      disableClose: true,
+      width: '800px'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result)
+        this.fetchImages();
+    });
+  }
 }

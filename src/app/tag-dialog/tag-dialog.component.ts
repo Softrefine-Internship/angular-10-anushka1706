@@ -18,7 +18,7 @@ export class TagDialogComponent {
     public dialogRef: MatDialogRef<TagDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { tags: string[] }
   ) {
-    this.tags = [...data.tags]; 
+    this.tags = [...(data.tags || [])];
   }
 
   addTag(event: MatChipInputEvent): void {

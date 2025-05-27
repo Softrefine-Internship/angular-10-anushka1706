@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { ImageModel } from '../image.model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatChipGrid } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-upload-file',
@@ -24,15 +25,17 @@ export class UploadFileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dataService: DataService,
-    private router: Router, 
-    private snackBar: MatSnackBar
-  ) {}
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<UploadFileComponent>
+  ) { }
 
   ngOnInit(): void {
+    console.log('DialogRef:', this.dialogRef);
     this.fileForm = this.fb.group({
       imageUrl: ['', Validators.required],
       description: ['', Validators.required],
-      tags: [[], Validators.required],
+      tags: [[]],
     });
   }
 
@@ -68,19 +71,29 @@ export class UploadFileComponent implements OnInit {
   }
 
   onFileDrop(event: DragEvent) {
+    let previewImage !: string
     event.preventDefault();
     this.isDragging = false;
     if (event.dataTransfer?.files?.length) {
       this.file = event.dataTransfer.files[0];
-      this.fileForm.patchValue({ imageUrl: this.file.name });
+      this.processImage(this.file)
     }
+  }
+  processImage(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const previewImage = reader.result as string;
+      this.fileForm.patchValue({ imageUrl: previewImage });
+    };
+    reader.readAsDataURL(file);
   }
 
   onFileSelected(event: Event) {
+    let previewImage !: string
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       this.file = target.files[0];
-      this.fileForm.patchValue({ imageUrl: this.file.name });
+      this.processImage(this.file)
     }
   }
 
@@ -89,22 +102,14 @@ export class UploadFileComponent implements OnInit {
       this.snackBar.open('Please fill all required fields, including at least one tag', 'Close', {
         duration: 3000,
       });
-      console.log('Form is invalid:', this.fileForm.errors);
-      console.log('Tags control errors:', this.fileForm.get('tags')?.errors);
       return;
     }
 
     const formValue = this.fileForm.value;
     const currentTime = new Date().toISOString();
-
     const tags = Array.isArray(formValue.tags) ? formValue.tags : [];
-    if (tags.length === 0) {
-      this.snackBar.open('Please add at least one tag', 'Close', { duration: 3000 });
-      return;
-    }
-
     const data: ImageModel = {
-      id : '0',
+      id: '0',
       imageUrl: formValue.imageUrl,
       description: formValue.description,
       tags: tags,
@@ -112,14 +117,12 @@ export class UploadFileComponent implements OnInit {
       updatedAt: currentTime,
     };
 
-    console.log('Submitting data:', data);
     this.dataService.saveData(data).subscribe({
       next: (response) => {
-        console.log(response.name)
         this.snackBar.open('Image uploaded successfully!', 'Close', { duration: 3000 });
         this.fileForm.reset();
         this.file = null;
-        this.router.navigate(['']); 
+        this.dialogRef.close();
       },
       error: (error) => {
         this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });

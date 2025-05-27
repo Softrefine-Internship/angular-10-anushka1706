@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class DeleteConfirmDialogComponent {
  constructor(
     public dialogRef: MatDialogRef<DeleteConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { imageUrl: string }
+    @Inject(MAT_DIALOG_DATA) public data: { description: string }
   ) {}
 
   confirm(): void {

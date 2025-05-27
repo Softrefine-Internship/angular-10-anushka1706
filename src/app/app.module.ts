@@ -15,8 +15,7 @@ import { ViewComponent } from './view/view.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { ImageItemComponent } from './image-item/image-item.component';
-import { UploadFileComponent } from './upload-file/upload-file.component';
+import { UploadFileComponent } from './upload-file-dialog/upload-file.component';
 import { SuccessComponent } from './shared/success/success.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
@@ -41,7 +40,6 @@ import { ConfirmDeleteBottomSheetComponent } from './delete-confirm-bottom-sheet
     HeaderComponent,
     GalleryComponent,
     ViewComponent,
-    ImageItemComponent,
     SuccessComponent,
     UploadFileComponent,
     TagDialogComponent,
